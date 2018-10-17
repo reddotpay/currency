@@ -1,6 +1,6 @@
 # currency
 --
-    import "github.com/darylnwk/currency"
+    import "github.com/reddotpay/currency"
 
 
 ## Usage
