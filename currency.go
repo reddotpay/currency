@@ -1,0 +1,188 @@
+package currency
+
+import (
+	"errors"
+	"strings"
+)
+
+// Currency contains currency details
+type Currency struct {
+	AlphaCode string
+	Name      string
+	Decimal   int
+}
+
+// New initialises a new Currency with ISO 4217 alphabetic code and
+// returns error if currency is invalid or not found
+func New(code string) (*Currency, error) {
+	code = strings.ToUpper(code)
+	if !IsValid(code) {
+		return nil, errors.New("currency: code is not a valid ISO 4217 alphabetic code")
+	}
+
+	currency := currencies[code]
+	return &currency, nil
+}
+
+// IsValid checks if `code` is valid
+func IsValid(code string) bool {
+	_, ok := currencies[code]
+	return ok
+}
+
+var (
+	currencies = map[string]Currency{
+		"AED": Currency{"AED", "United Arab Emirates dirham", 2},
+		"AFN": Currency{"AFN", "Afghanistan afghani", 2},
+		"AMD": Currency{"AMD", "Armenian dram", 2},
+		"ANG": Currency{"ANG", "Netherlands Antillean guilder", 2},
+		"AOA": Currency{"AOA", "Angola kwanza", 2},
+		"ARS": Currency{"ARS", "Argentine peso", 2},
+		"AUD": Currency{"AUD", "Australian dollar", 2},
+		"AWG": Currency{"AWG", "Aruban guilder", 2},
+		"AZN": Currency{"AZN", "Azerbaijanian manat", 2},
+		"BAM": Currency{"BAM", "Bosnia and Herzegovina convertible mark", 2},
+		"BBD": Currency{"BBD", "Barbados dollar", 2},
+		"BDT": Currency{"BDT", "Bangladeshi taka", 2},
+		"BGN": Currency{"BGN", "Bulgarian lev", 2},
+		"BHD": Currency{"BHD", "Bahraini dinar", 3},
+		"BIF": Currency{"BIF", "Burundian franc", 0},
+		"BMD": Currency{"BMD", "Bermuda dollar", 2},
+		"BND": Currency{"BND", "Brunei dollar", 2},
+		"BOB": Currency{"BOB", "Bolivian boliviano", 2},
+		"BRL": Currency{"BRL", "Brazilian real", 2},
+		"BSD": Currency{"BSD", "Bahamian dollar", 2},
+		"BWP": Currency{"BWP", "Botswana pula", 2},
+		"BYN": Currency{"BYN", "Belarussian ruble", 2},
+		"BZD": Currency{"BZD", "Belize dollar", 2},
+		"CAD": Currency{"CAD", "Canadian dollar", 2},
+		"CDF": Currency{"CDF", "Congolese franc", 2},
+		"CHF": Currency{"CHF", "Swiss franc", 2},
+		"CLP": Currency{"CLP", "Chilean peso", 0},
+		"CNY": Currency{"CNY", "Chinese yuan renminbi", 2},
+		"COP": Currency{"COP", "Columbian peso", 2},
+		"CRC": Currency{"CRC", "Costa Rican colon", 2},
+		"CSK": Currency{"CSK", "Czech koruna", 2},
+		"CVE": Currency{"CVE", "Cape Verde escudo", 2},
+		"CZK": Currency{"CZK", "Czech koruna", 2},
+		"DJF": Currency{"DJF", "Djiboutian franc", 0},
+		"DKK": Currency{"DKK", "Danish krone", 2},
+		"DOP": Currency{"DOP", "Dominican peso", 2},
+		"DZD": Currency{"DZD", "Algerian dinar", 2},
+		"EGP": Currency{"EGP", "Egyptian pound", 2},
+		"ERN": Currency{"ERN", "Eritrean nakfa", 2},
+		"ETB": Currency{"ETB", "Ethiopian birr", 2},
+		"EUR": Currency{"EUR", "Euro", 2},
+		"FJD": Currency{"FJD", "Fiji dollar", 2},
+		"FKP": Currency{"FKP", "Falkland Islands pound", 2},
+		"GBP": Currency{"GBP", "British pound sterling", 2},
+		"GEL": Currency{"GEL", "Georgian lari", 2},
+		"GHS": Currency{"GHS", "Ghana cedi", 2},
+		"GIP": Currency{"GIP", "Gibraltar pound", 2},
+		"GMD": Currency{"GMD", "Gambian dalasi", 2},
+		"GNF": Currency{"GNF", "Guinean franc", 0},
+		"GTQ": Currency{"GTQ", "Guatemalan quetzal", 2},
+		"GWP": Currency{"GWP", "Guinea-Bissau peso", 0},
+		"GYD": Currency{"GYD", "Guyanese dollar", 2},
+		"HKD": Currency{"HKD", "Hong Kong dollar", 2},
+		"HNL": Currency{"HNL", "Hunduran Lempira", 2},
+		"HRK": Currency{"HRK", "Croatian kuna", 2},
+		"HTG": Currency{"HTG", "Haitian gourde", 2},
+		"HUF": Currency{"HUF", "Hungarian forint", 2},
+		"IDR": Currency{"IDR", "Indonesian rupiah", 2},
+		"ILS": Currency{"ILS", "Israeli sheqel", 0},
+		"INR": Currency{"INR", "Indian rupee", 2},
+		"IQD": Currency{"IQD", "Iraqi dinar", 3},
+		"ISK": Currency{"ISK", "Icelandic krona", 2},
+		"JMD": Currency{"JMD", "Jamaican dollar", 2},
+		"JOD": Currency{"JOD", "Jordanian dinar", 3},
+		"JPY": Currency{"JPY", "Japanese yen", 0},
+		"KES": Currency{"KES", "Kenyan shilling", 2},
+		"KGS": Currency{"KGS", "Kyrgyzstani som", 2},
+		"KHR": Currency{"KHR", "Cambodian riel", 2},
+		"KMF": Currency{"KMF", "Comoro franc", 0},
+		"KRW": Currency{"KRW", "South Korean won", 0},
+		"KWD": Currency{"KWD", "Kuwaiti dinar", 3},
+		"KYD": Currency{"KYD", "Cayman Islands dollar", 2},
+		"KZT": Currency{"KZT", "Kazakhstani tenge", 2},
+		"LAK": Currency{"LAK", "Lao kip", 2},
+		"LBP": Currency{"LBP", "Lebanese pound", 2},
+		"LKR": Currency{"LKR", "Sri Lanka rupee", 2},
+		"LRD": Currency{"LRD", "Liberian dollar", 2},
+		"LSL": Currency{"LSL", "Lesotho loti", 2},
+		"LTL": Currency{"LTL", "Lithuanian litas", 2},
+		"LVL": Currency{"LVL", "Latvian lats", 2},
+		"MAD": Currency{"MAD", "Moroccan dirham", 2},
+		"MDL": Currency{"MDL", "Moldovan leu", 2},
+		"MGA": Currency{"MGA", "Malagasy ariary", 0},
+		"MKD": Currency{"MKD", "Macedonian denar", 2},
+		"MMK": Currency{"MMK", "Myanmar kyat", 2},
+		"MNT": Currency{"MNT", "Mongolian tugrik", 2},
+		"MOP": Currency{"MOP", "Macanese pataca", 2},
+		"MRO": Currency{"MRO", "Mauritanian ouguiya", 2},
+		"MUR": Currency{"MUR", "Mauritius rupee", 2},
+		"MVR": Currency{"MVR", "Maldivian rufiyaa", 2},
+		"MWK": Currency{"MWK", "Malawian kwacha", 2},
+		"MXN": Currency{"MXN", "Mexican peso", 2},
+		"MYR": Currency{"MYR", "Malaysian ringgit", 2},
+		"MZN": Currency{"MZN", "Mozambican metical", 2},
+		"NAD": Currency{"NAD", "Namibian dollar", 2},
+		"NGN": Currency{"NGN", "Nigerian naira", 2},
+		"NIO": Currency{"NIO", "Cordoba oro", 2},
+		"NOK": Currency{"NOK", "Norwegian krone", 2},
+		"NPR": Currency{"NPR", "Nepalese rupee", 2},
+		"NZD": Currency{"NZD", "New Zealand dollar", 2},
+		"OMR": Currency{"OMR", "Omani rial", 3},
+		"PAB": Currency{"PAB", "Panamanian balboa", 2},
+		"PEN": Currency{"PEN", "Peruvian nuevo sol", 2},
+		"PGK": Currency{"PGK", "Papua New Guinean kina", 2},
+		"PHP": Currency{"PHP", "Philippine peso", 2},
+		"PKR": Currency{"PKR", "Pakistan rupee", 2},
+		"PLN": Currency{"PLN", "Polish zloty", 2},
+		"PYG": Currency{"PYG", "Paraguayan guarani", 0},
+		"QAR": Currency{"QAR", "Qatari rial", 2},
+		"RON": Currency{"RON", "Romanian leu", 2},
+		"RSD": Currency{"RSD", "Serbian dinar", 2},
+		"RUB": Currency{"RUB", "Russian ruble", 2},
+		"RWF": Currency{"RWF", "Rwanda franc", 0},
+		"SAR": Currency{"SAR", "Saudi Arabian riyal", 2},
+		"SBD": Currency{"SBD", "Solomon Islands dollar", 2},
+		"SCR": Currency{"SCR", "Seychelles rupee", 2},
+		"SEK": Currency{"SEK", "Swedish krona", 2},
+		"SGD": Currency{"SGD", "Singapore dollar", 2},
+		"SHP": Currency{"SHP", "Saint Helena pound", 2},
+		"SLL": Currency{"SLL", "Sierra Leonean leone", 2},
+		"SOS": Currency{"SOS", "Somali shilling", 2},
+		"SRD": Currency{"SRD", "Surinamese dollar", 2},
+		"SSP": Currency{"SSP", "South Sudanese pound", 2},
+		"STD": Currency{"STD", "Sao Tome and Principe dobra", 2},
+		"SYP": Currency{"SYP", "Syrian pound", 2},
+		"SZL": Currency{"SZL", "Swaziland lilangeni", 2},
+		"THB": Currency{"THB", "Thai baht", 2},
+		"TJS": Currency{"TJS", "Tajikistani somoni", 2},
+		"TND": Currency{"TND", "Tunisian dinar", 3},
+		"TOP": Currency{"TOP", "Tongan pa’anga", 2},
+		"TRY": Currency{"TRY", "Turkish lira", 2},
+		"TTD": Currency{"TTD", "Trinidad and Tobago dollar", 2},
+		"TWD": Currency{"TWD", "Taiwan dollar", 2},
+		"TZS": Currency{"TZS", "Tanzanian shilling", 2},
+		"UAH": Currency{"UAH", "Ukrainian hryvnia", 2},
+		"UGX": Currency{"UGX", "Ugandan shilling", 0},
+		"USD": Currency{"USD", "United States dollar", 2},
+		"UYU": Currency{"UYU", "Uruguayan peso", 2},
+		"UZS": Currency{"UZS", "Uzbekistan som", 2},
+		"VEF": Currency{"VEF", "Venezuelan bolivar fuerte", 2},
+		"VND": Currency{"VND", "Vietnamese dong", 0},
+		"VUV": Currency{"VUV", "Vanuatu vatu", 0},
+		"WST": Currency{"WST", "Samoan tala", 2},
+		"XAF": Currency{"XAF", "CFA franc BEAC", 0},
+		"XCD": Currency{"XCD", "East Caribbean dollar", 2},
+		"XOF": Currency{"XOF", "CFA Franc BCEAO", 0},
+		"XPF": Currency{"XPF", "CFP franc", 0},
+		"YER": Currency{"YER", "Yemeni rial", 2},
+		"ZAR": Currency{"ZAR", "South African rand", 2},
+		"ZMK": Currency{"ZMK", "Zambian kwacha", 2},
+		"ZMW": Currency{"ZMW", "Zambian kwacha", 2},
+		"ZWD": Currency{"ZWD", "Zimbabwean dollar", 2},
+	}
+)
