@@ -3,7 +3,7 @@ package currency_test
 import (
 	"testing"
 
-	"github.com/darylnwk/currency"
+	"github.com/reddotpay/currency"
 	"github.com/stretchr/testify/assert"
 )
 
