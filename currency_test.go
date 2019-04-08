@@ -12,7 +12,6 @@ func TestCurrency_New(t *testing.T) {
 	assert := assert.New(t)
 	assert.NoError(err)
 	assert.Equal("SGD", sgd.AlphaCode)
-	assert.Equal("Singapore dollar", sgd.Name)
 	assert.Equal(2, sgd.Decimal)
 }
 
@@ -21,7 +20,6 @@ func TestCurrency_New_LowerCase(t *testing.T) {
 	assert := assert.New(t)
 	assert.NoError(err)
 	assert.Equal("SGD", sgd.AlphaCode)
-	assert.Equal("Singapore dollar", sgd.Name)
 	assert.Equal(2, sgd.Decimal)
 }
 
