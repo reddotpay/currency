@@ -7,6 +7,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestCurrency_New_Numeric(t *testing.T) {
+	sgd, err := currency.New("702")
+	assert := assert.New(t)
+	assert.NoError(err)
+	assert.Equal("SGD", sgd.AlphaCode)
+	assert.Equal("702", sgd.NumericCode)
+	assert.Equal(2, sgd.Decimal)
+}
+
 func TestCurrency_New(t *testing.T) {
 	sgd, err := currency.New("SGD")
 	assert := assert.New(t)
@@ -28,4 +37,11 @@ func TestCurrency_New_InvalidCurrency(t *testing.T) {
 	assert := assert.New(t)
 	assert.Nil(sgd)
 	assert.EqualError(err, "currency: code is not a valid ISO 4217 alphabetic code")
+}
+
+func TestCurrency_New_InvalidCurrency_Numeric(t *testing.T) {
+	sgd, err := currency.New("000")
+	assert := assert.New(t)
+	assert.Nil(sgd)
+	assert.EqualError(err, "currency: code is not a valid ISO 4217 numeric code")
 }

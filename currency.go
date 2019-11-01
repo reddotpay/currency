@@ -2,6 +2,7 @@ package currency
 
 import (
 	"errors"
+	"strconv"
 	"strings"
 )
 
@@ -15,24 +16,38 @@ type Currency struct {
 // New initialises a new Currency with ISO 4217 alphabetic code and
 // returns error if currency is invalid or not found
 func New(code string) (*Currency, error) {
+	if _, err := strconv.Atoi(code); err == nil {
+		if !IsValid(code) {
+			return nil, errors.New("currency: code is not a valid ISO 4217 numeric code")
+		}
+
+		currency := currenciesByNumeric[code]
+		return &currency, nil
+	}
+
 	code = strings.ToUpper(code)
 	if !IsValid(code) {
 		return nil, errors.New("currency: code is not a valid ISO 4217 alphabetic code")
 	}
 
-	currency := currencies[code]
+	currency := currenciesByAlpha[code]
 	return &currency, nil
 }
 
 // IsValid checks if `code` is valid
 func IsValid(code string) bool {
-	_, ok := currencies[code]
+	if _, err := strconv.Atoi(code); err == nil {
+		_, ok := currenciesByNumeric[code]
+		return ok
+	}
+
+	_, ok := currenciesByAlpha[code]
 	return ok
 }
 
 var (
 	// Source: https://www.currency-iso.org/en/home/tables/table-a1.html
-	currencies = map[string]Currency{
+	currenciesByAlpha = map[string]Currency{
 		"AFN": Currency{"AFN", "971", 2},
 		"EUR": Currency{"EUR", "978", 2},
 		"ALL": Currency{"ALL", "008", 2},
@@ -199,5 +214,174 @@ var (
 		"YER": Currency{"YER", "886", 2},
 		"ZMW": Currency{"ZMW", "967", 2},
 		"ZWL": Currency{"ZWL", "932", 2},
+	}
+
+	currenciesByNumeric = map[string]Currency{
+		"971": Currency{"AFN", "971", 2},
+		"978": Currency{"EUR", "978", 2},
+		"008": Currency{"ALL", "008", 2},
+		"012": Currency{"DZD", "012", 2},
+		"840": Currency{"USD", "840", 2},
+		"973": Currency{"AOA", "973", 2},
+		"951": Currency{"XCD", "951", 2},
+		"032": Currency{"ARS", "032", 2},
+		"051": Currency{"AMD", "051", 2},
+		"533": Currency{"AWG", "533", 2},
+		"036": Currency{"AUD", "036", 2},
+		"944": Currency{"AZN", "944", 2},
+		"044": Currency{"BSD", "044", 2},
+		"048": Currency{"BHD", "048", 3},
+		"050": Currency{"BDT", "050", 2},
+		"052": Currency{"BBD", "052", 2},
+		"933": Currency{"BYN", "933", 2},
+		"084": Currency{"BZD", "084", 2},
+		"952": Currency{"XOF", "952", 0},
+		"060": Currency{"BMD", "060", 2},
+		"356": Currency{"INR", "356", 2},
+		"064": Currency{"BTN", "064", 2},
+		"068": Currency{"BOB", "068", 2},
+		"984": Currency{"BOV", "984", 2},
+		"977": Currency{"BAM", "977", 2},
+		"072": Currency{"BWP", "072", 2},
+		"578": Currency{"NOK", "578", 2},
+		"986": Currency{"BRL", "986", 2},
+		"096": Currency{"BND", "096", 2},
+		"975": Currency{"BGN", "975", 2},
+		"108": Currency{"BIF", "108", 0},
+		"132": Currency{"CVE", "132", 2},
+		"116": Currency{"KHR", "116", 2},
+		"950": Currency{"XAF", "950", 0},
+		"124": Currency{"CAD", "124", 2},
+		"136": Currency{"KYD", "136", 2},
+		"152": Currency{"CLP", "152", 0},
+		"990": Currency{"CLF", "990", 4},
+		"156": Currency{"CNY", "156", 2},
+		"170": Currency{"COP", "170", 2},
+		"970": Currency{"COU", "970", 2},
+		"174": Currency{"KMF", "174", 0},
+		"976": Currency{"CDF", "976", 2},
+		"554": Currency{"NZD", "554", 2},
+		"188": Currency{"CRC", "188", 2},
+		"191": Currency{"HRK", "191", 2},
+		"192": Currency{"CUP", "192", 2},
+		"931": Currency{"CUC", "931", 2},
+		"532": Currency{"ANG", "532", 2},
+		"203": Currency{"CZK", "203", 2},
+		"208": Currency{"DKK", "208", 2},
+		"262": Currency{"DJF", "262", 0},
+		"214": Currency{"DOP", "214", 2},
+		"818": Currency{"EGP", "818", 2},
+		"222": Currency{"SVC", "222", 2},
+		"232": Currency{"ERN", "232", 2},
+		"230": Currency{"ETB", "230", 2},
+		"238": Currency{"FKP", "238", 2},
+		"242": Currency{"FJD", "242", 2},
+		"953": Currency{"XPF", "953", 0},
+		"270": Currency{"GMD", "270", 2},
+		"981": Currency{"GEL", "981", 2},
+		"936": Currency{"GHS", "936", 2},
+		"292": Currency{"GIP", "292", 2},
+		"320": Currency{"GTQ", "320", 2},
+		"826": Currency{"GBP", "826", 2},
+		"324": Currency{"GNF", "324", 0},
+		"328": Currency{"GYD", "328", 2},
+		"332": Currency{"HTG", "332", 2},
+		"340": Currency{"HNL", "340", 2},
+		"344": Currency{"HKD", "344", 2},
+		"348": Currency{"HUF", "348", 2},
+		"352": Currency{"ISK", "352", 0},
+		"360": Currency{"IDR", "360", 2},
+		"364": Currency{"IRR", "364", 2},
+		"368": Currency{"IQD", "368", 3},
+		"376": Currency{"ILS", "376", 2},
+		"388": Currency{"JMD", "388", 2},
+		"392": Currency{"JPY", "392", 0},
+		"400": Currency{"JOD", "400", 3},
+		"398": Currency{"KZT", "398", 2},
+		"404": Currency{"KES", "404", 2},
+		"408": Currency{"KPW", "408", 2},
+		"410": Currency{"KRW", "410", 0},
+		"414": Currency{"KWD", "414", 3},
+		"417": Currency{"KGS", "417", 2},
+		"418": Currency{"LAK", "418", 2},
+		"422": Currency{"LBP", "422", 2},
+		"426": Currency{"LSL", "426", 2},
+		"710": Currency{"ZAR", "710", 2},
+		"430": Currency{"LRD", "430", 2},
+		"434": Currency{"LYD", "434", 3},
+		"756": Currency{"CHF", "756", 2},
+		"446": Currency{"MOP", "446", 2},
+		"807": Currency{"MKD", "807", 2},
+		"969": Currency{"MGA", "969", 2},
+		"454": Currency{"MWK", "454", 2},
+		"458": Currency{"MYR", "458", 2},
+		"462": Currency{"MVR", "462", 2},
+		"929": Currency{"MRU", "929", 2},
+		"480": Currency{"MUR", "480", 2},
+		"484": Currency{"MXN", "484", 2},
+		"979": Currency{"MXV", "979", 2},
+		"498": Currency{"MDL", "498", 2},
+		"496": Currency{"MNT", "496", 2},
+		"504": Currency{"MAD", "504", 2},
+		"943": Currency{"MZN", "943", 2},
+		"104": Currency{"MMK", "104", 2},
+		"516": Currency{"NAD", "516", 2},
+		"524": Currency{"NPR", "524", 2},
+		"558": Currency{"NIO", "558", 2},
+		"566": Currency{"NGN", "566", 2},
+		"512": Currency{"OMR", "512", 3},
+		"586": Currency{"PKR", "586", 2},
+		"590": Currency{"PAB", "590", 2},
+		"598": Currency{"PGK", "598", 2},
+		"600": Currency{"PYG", "600", 0},
+		"604": Currency{"PEN", "604", 2},
+		"608": Currency{"PHP", "608", 2},
+		"985": Currency{"PLN", "985", 2},
+		"634": Currency{"QAR", "634", 2},
+		"946": Currency{"RON", "946", 2},
+		"643": Currency{"RUB", "643", 2},
+		"646": Currency{"RWF", "646", 0},
+		"654": Currency{"SHP", "654", 2},
+		"882": Currency{"WST", "882", 2},
+		"930": Currency{"STN", "930", 2},
+		"682": Currency{"SAR", "682", 2},
+		"941": Currency{"RSD", "941", 2},
+		"690": Currency{"SCR", "690", 2},
+		"694": Currency{"SLL", "694", 2},
+		"702": Currency{"SGD", "702", 2},
+		"090": Currency{"SBD", "090", 2},
+		"706": Currency{"SOS", "706", 2},
+		"728": Currency{"SSP", "728", 2},
+		"144": Currency{"LKR", "144", 2},
+		"938": Currency{"SDG", "938", 2},
+		"968": Currency{"SRD", "968", 2},
+		"748": Currency{"SZL", "748", 2},
+		"752": Currency{"SEK", "752", 2},
+		"947": Currency{"CHE", "947", 2},
+		"948": Currency{"CHW", "948", 2},
+		"760": Currency{"SYP", "760", 2},
+		"901": Currency{"TWD", "901", 2},
+		"972": Currency{"TJS", "972", 2},
+		"834": Currency{"TZS", "834", 2},
+		"764": Currency{"THB", "764", 2},
+		"776": Currency{"TOP", "776", 2},
+		"780": Currency{"TTD", "780", 2},
+		"788": Currency{"TND", "788", 3},
+		"949": Currency{"TRY", "949", 2},
+		"934": Currency{"TMT", "934", 2},
+		"800": Currency{"UGX", "800", 0},
+		"980": Currency{"UAH", "980", 2},
+		"784": Currency{"AED", "784", 2},
+		"997": Currency{"USN", "997", 2},
+		"858": Currency{"UYU", "858", 2},
+		"940": Currency{"UYI", "940", 0},
+		"927": Currency{"UYW", "927", 4},
+		"860": Currency{"UZS", "860", 2},
+		"548": Currency{"VUV", "548", 0},
+		"928": Currency{"VES", "928", 2},
+		"704": Currency{"VND", "704", 0},
+		"886": Currency{"YER", "886", 2},
+		"967": Currency{"ZMW", "967", 2},
+		"932": Currency{"ZWL", "932", 2},
 	}
 )
